@@ -1,0 +1,11 @@
+ MAX30102	
+	VCC<->3.3V
+	GND<->GND
+	SCL<->PB7
+	SDA<->PB8
+	INT<->PB9
+OLED
+	SCL<->PB11
+	SDA<->PB10
+	VCC<->3.3V
+	GND<->GND
