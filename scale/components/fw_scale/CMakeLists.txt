@@ -1,0 +1,21 @@
+idf_component_register(
+    SRCS
+        hx711.c
+        scale_frame.c
+        fw_scale_app.c
+        scale_transport.c
+    INCLUDE_DIRS
+        include
+    REQUIRES
+        fw_proto
+        driver
+        esp_driver_gpio
+        esp_driver_uart
+        esp_timer
+        esp_wifi
+        esp_netif
+        esp_event
+        nvs_flash
+        lwip
+        freertos
+)

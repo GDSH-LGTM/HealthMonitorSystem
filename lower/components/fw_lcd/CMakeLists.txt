@@ -1,0 +1,15 @@
+idf_component_register(
+    SRCS
+        fw_lcd.c
+        fw_touch.c
+        fw_ui.c
+    INCLUDE_DIRS
+        include
+    REQUIRES
+        lvgl
+        driver
+        esp_driver_spi
+        esp_driver_gpio
+        esp_timer
+        freertos
+)

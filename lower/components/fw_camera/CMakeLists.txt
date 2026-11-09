@@ -1,0 +1,13 @@
+idf_component_register(
+    SRCS
+        fw_camera.c
+    INCLUDE_DIRS
+        include
+    REQUIRES
+        fw_core
+        esp32_camera
+        esp_psram
+        esp_driver_gpio
+        esp_driver_ledc
+        freertos
+)

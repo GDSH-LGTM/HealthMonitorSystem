@@ -1,0 +1,14 @@
+idf_component_register(
+    SRCS
+        band_sensors.c
+        max30102_algo.c
+    INCLUDE_DIRS
+        include
+    REQUIRES
+        fw_core
+        driver
+        esp_driver_i2c
+        esp_driver_gpio
+        esp_timer
+        freertos
+)

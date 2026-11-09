@@ -1,0 +1,38 @@
+# ---- ESP-IDF 构建产物 ----
+build/
+sdkconfig
+sdkconfig.old
+managed_components/
+dependencies.lock
+
+# ---- 第三方库（本地内置，不进版本控制）----
+# LVGL 约 1200 个文件、esp32-camera + esp-jpeg 约 160 个，纳入仓库会把
+# git log / diff 彻底淹没。它们都是可再生的：跑一次 scripts/fetch_deps.ps1
+# 从旧工程复制，或用 'idf.py add-dependency' 从组件注册表拉取。
+third_party/
+
+# ---- 自测可执行文件 ----
+test/*.exe
+test/*.obj
+*.o
+*.obj
+
+# ---- 编辑器 / 系统 ----
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+desktop.ini
+
+# ---- 日志 ----
+build_log.txt
+bringup_log.txt
+cam_build_log.txt
+*.log
+
+# ---- 运行时产物 ----
+photos/
+*.db
+
+# ---- 工具生成的本地配置 ----
+.clangd

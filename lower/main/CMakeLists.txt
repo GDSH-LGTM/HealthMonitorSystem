@@ -1,0 +1,19 @@
+idf_component_register(
+    SRCS
+        "main.c"
+    INCLUDE_DIRS
+        "."
+    REQUIRES
+        fw_core
+        fw_net
+        fw_sensors
+        fw_lcd
+        fw_camera
+        driver
+        esp_driver_uart
+        nvs_flash
+        esp_wifi
+        esp_psram
+        esp_hw_support
+        freertos
+)

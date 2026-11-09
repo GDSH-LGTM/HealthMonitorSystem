@@ -1,0 +1,86 @@
+# ============================================================
+# ESP32-S3 健康监测手环 — sdkconfig.defaults
+# 目标：ESP32-S3-WROOM-1-N16R8 (16MB Quad Flash + 8MB Octal PSRAM)
+# ESP-IDF v5.5.5
+# ============================================================
+
+# ---- Target ----
+CONFIG_IDF_TARGET="esp32s3"
+
+# ---- 分区表 ----
+CONFIG_PARTITION_TABLE_CUSTOM=y
+CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="partitions.csv"
+
+# ---- Flash：16MB ----
+CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y
+CONFIG_ESPTOOLPY_FLASHFREQ_80M=y
+
+# ---- PSRAM ----
+# 本板模组丝印看不到型号，因此用 QUAD 模式（保守选择）：
+#   QUAD 在 R2 和 R8 两种模组上都能跑；OCT 只适合 R8，若板子实为 R2 用 OCT 会启动失败。
+# 启动日志的 "PSRAM: N 字节" 会直接报出实际容量 —— 确认是 R8 后可改 OCT 提速。
+# 若报“未检测到 PSRAM”（本板是 N16）：
+#   注释掉这一段，并把 fw_camera 的 fb_location 改成 CAMERA_FB_IN_DRAM、fb_count 降到 1。
+#
+# ⚠️ 这里必须与上一行注释一致地用 QUAD。此前误写成 OCT，与注释自相矛盾；
+#    因为 sdkconfig 是生成物且被 gitignore，该矛盾一直没暴露（实际生效的是
+#    早先生成的 sdkconfig 里的 QUAD）。删掉 sdkconfig 重新构建时就会踩到。
+CONFIG_SPIRAM=y
+CONFIG_SPIRAM_MODE_QUAD=y
+CONFIG_SPIRAM_TYPE_AUTO=y
+CONFIG_SPIRAM_SPEED_80M=y
+CONFIG_SPIRAM_USE_MALLOC=y
+CONFIG_SPIRAM_MALLOC_ALWAYSINTERNAL=4096
+CONFIG_SPIRAM_TRY_ALLOCATE_WIFI_LWIP=y
+
+# ---- FreeRTOS ----
+CONFIG_FREERTOS_HZ=1000
+CONFIG_FREERTOS_ENABLE_BACKWARD_COMPATIBILITY=y
+
+# ---- WiFi ----
+CONFIG_ESP_WIFI_STA_DISCONNECTED_PM_ENABLE=n
+CONFIG_LWIP_TCP_SND_BUF_DEFAULT=11680
+CONFIG_LWIP_TCP_WND_DEFAULT=11680
+CONFIG_LWIP_TCP_MSS=1460
+
+# ---- 日志（UART0 同时要发协议帧，日志级别别太吵）----
+CONFIG_LOG_DEFAULT_LEVEL_INFO=y
+CONFIG_LOG_COLORS=y
+
+# ---- 优化 ----
+CONFIG_COMPILER_OPTIMIZATION_SIZE=y
+
+# ---- 串口：监视 115200（烧录波特率在命令行 -b 指定）----
+CONFIG_MONITOR_BAUD=115200
+
+# ---- 关掉 USB Serial/JTAG，释放 GPIO39-42 给 LCD/触摸 ----
+# 必须用 Micro-USB(UART0) 口烧录，不要用 USB-C(OTG) 口
+CONFIG_USJ_ENABLE_USB_SERIAL_JTAG=n
+CONFIG_ESP_CONSOLE_SECONDARY_NONE=y
+CONFIG_ESP_CONSOLE_UART_BAUDRATE=115200
+
+# ---- 任务看门狗：调试期先关，避免传感器长耗时被复位 ----
+CONFIG_ESP_TASK_WDT_INIT=n
+
+# ---- LVGL 8.4（本地内置在 components/fw_lcd/lvgl，走 Kconfig 配置）----
+CONFIG_LV_CONF_SKIP=y
+CONFIG_LV_COLOR_DEPTH_16=y
+CONFIG_LV_MEM_SIZE_KILOBYTES=48
+CONFIG_LV_FONT_MONTSERRAT_14=y
+CONFIG_LV_FONT_MONTSERRAT_20=y
+CONFIG_LV_FONT_MONTSERRAT_24=y
+CONFIG_LV_FONT_DEFAULT_MONTSERRAT_20=y
+CONFIG_LV_USE_LABEL=y
+CONFIG_LV_USE_LINE=y
+CONFIG_LV_USE_THEME_DEFAULT=y
+CONFIG_LV_USE_THEME_BASIC=y
+# 用不到的大件关掉，省 flash / RAM
+# CONFIG_LV_USE_CALENDAR is not set
+# CONFIG_LV_USE_KEYBOARD is not set
+# CONFIG_LV_USE_TABVIEW is not set
+# CONFIG_LV_USE_TILEVIEW is not set
+# CONFIG_LV_USE_WIN is not set
+# CONFIG_LV_USE_CHART is not set
+# CONFIG_LV_USE_COLORWHEEL is not set
+
+# ---- 摄像头（接入 fw_camera 时再启用对应 Kconfig）----
