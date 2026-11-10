@@ -16,3 +16,7 @@ build-*/
 .dsh-acl-report/
 lower_old_archive/
 ppt_work/
+
+# 内部文档（不公开）
+*.md
+!README.md
